@@ -1,0 +1,171 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>北京时间实时显示 北京时间精确到毫秒的在线时钟 时间校准网</title>
+    <meta name="keywords" content="北京时间,北京时间精确到毫秒的在线时,北京时间实时显示">
+    <meta name="description" content="时间校准网提供精确到毫秒的在线时钟，实时显示现在的北京时间。">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --background: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', system-ui, sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), #34495e);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            gap: 1.5rem;
+        }
+
+        .time-card {
+            background: white;
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        #time {
+            font-family: 'Fira Code', monospace;
+            font-size: 3.5rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        #date {
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .link-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .link-card a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .beian {
+            margin-top: 1.5rem;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .disclaimer {
+            color: #95a5a6;
+            max-width: 600px;
+            margin: 1rem auto;
+            line-height: 1.6;
+        }
+    </style>
+    <link href="https://fonts.loli.net/css?family=Fira+Code&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+    
+
+    <main class="main">
+        <div class="time-card">
+            <div id="time">14:37:18<span style="font-size: 0.8em; color: var(--secondary)">.763</span></div>
+            <div id="date">2025年10月23日星期四</div>
+        </div>
+
+        
+    </main>
+
+    
+
+    <script>
+        function formatTime(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function updateDisplay() {
+            const now = new Date();
+            
+            // 时间格式化
+            const timeStr = [
+                formatTime(now.getHours()),
+                formatTime(now.getMinutes()),
+                formatTime(now.getSeconds())
+            ].join(':') + 
+            `<span style="font-size: 0.8em; color: var(--secondary)">.${now.getMilliseconds().toString().padStart(3, '0')}</span>`;
+
+            // 日期格式化
+            const dateOptions = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long' 
+            };
+            const dateStr = now.toLocaleDateString('zh-CN', dateOptions);
+
+            document.getElementById('time').innerHTML = timeStr;
+            document.getElementById('date').textContent = dateStr;
+
+            requestAnimationFrame(updateDisplay);
+        }
+
+        // 启动时间更新
+        updateDisplay();
+
+        // 性能优化：限制后台标签页的刷新率
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                setTimeout(updateDisplay, 100);
+            } else {
+                requestAnimationFrame(updateDisplay);
+            }
+        });
+    </script>
+
+</body></html>
